@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/charmbracelet/bubbles/spinner"
-	tea "github.com/charmbracelet/bubbletea"
+	"charm.land/bubbles/v2/spinner"
+	tea "charm.land/bubbletea/v2"
 	"github.com/nezdemkovski/cli-tool-template/internal/domain/run"
 	"github.com/nezdemkovski/cli-tool-template/internal/shared/ui"
 )
@@ -63,8 +63,8 @@ func (m RunModel) run() tea.Cmd {
 
 func (m RunModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		if msg.Type == tea.KeyCtrlC {
+	case tea.KeyPressMsg:
+		if msg.String() == "ctrl+c" {
 			return m, tea.Quit
 		}
 	case runErrorMsg:
@@ -83,16 +83,16 @@ func (m RunModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m RunModel) View() string {
+func (m RunModel) View() tea.View {
 	if m.err != nil || m.step == runStepComplete {
-		return ""
+		return tea.NewView("")
 	}
 
 	var s strings.Builder
 	s.WriteString(ui.Title.Render("Running"))
 	s.WriteString("\n\n")
 	s.WriteString(m.spinner.View() + " " + ui.Value.Render("Executing operation..."))
-	return ui.Container.Render(s.String())
+	return tea.NewView(ui.Container.Render(s.String()))
 }
 
 func (m RunModel) Error() error {

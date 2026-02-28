@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/nezdemkovski/cli-tool-template/internal/presentation"
 	"github.com/spf13/cobra"
 )
@@ -13,10 +13,7 @@ var initCmd = &cobra.Command{
 	Short: "Initialize configuration",
 	Long:  "Interactive setup that writes a small config file to your home directory.",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		p := tea.NewProgram(
-			presentation.NewInitModel(),
-			tea.WithAltScreen(),
-		)
+		p := tea.NewProgram(presentation.NewInitModel())
 
 		finalModel, err := p.Run()
 		if err != nil {

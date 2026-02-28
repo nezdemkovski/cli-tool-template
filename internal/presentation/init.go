@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/huh"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/huh/v2"
 	"github.com/nezdemkovski/cli-tool-template/internal/infrastructure/config"
 	"github.com/nezdemkovski/cli-tool-template/internal/infrastructure/secrets"
 	"github.com/nezdemkovski/cli-tool-template/internal/shared/ui"
@@ -67,7 +67,7 @@ func NewInitModel() *InitModel {
 					return validation.ValidateNonEmpty("environment", m.env)
 				}),
 		),
-	).WithTheme(huh.ThemeBase()).
+	).WithTheme(huh.ThemeFunc(huh.ThemeBase)).
 		WithShowHelp(true)
 
 	return m
@@ -83,8 +83,8 @@ func (m *InitModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width = msg.Width
 		m.height = msg.Height
 		m.layout.UpdateDimensions(msg.Width, msg.Height)
-	case tea.KeyMsg:
-		if msg.Type == tea.KeyCtrlC {
+	case tea.KeyPressMsg:
+		if msg.String() == "ctrl+c" {
 			return m, tea.Quit
 		}
 	}
@@ -125,9 +125,11 @@ func (m *InitModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m *InitModel) View() string {
+func (m *InitModel) View() tea.View {
 	if m.width == 0 || m.height == 0 {
-		return "Loading..."
+		v := tea.NewView("Loading...")
+		v.AltScreen = true
+		return v
 	}
 
 	sections := []string{
@@ -136,7 +138,9 @@ func (m *InitModel) View() string {
 		m.layout.RenderBody(m.form.View()),
 	}
 
-	return m.layout.RenderCentered(sections...)
+	v := tea.NewView(m.layout.RenderCentered(sections...))
+	v.AltScreen = true
+	return v
 }
 
 func (m *InitModel) Error() error {

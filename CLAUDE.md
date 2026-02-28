@@ -7,7 +7,7 @@ This file provides guidance for Claude Code when working with this repository.
 A minimal, TUI-ready Go CLI template using Cobra for commands and Bubble Tea for terminal UI. Based on clean architecture patterns from `ndev`.
 
 **Module**: `github.com/nezdemkovski/cli-tool-template`
-**Go version**: 1.25.5
+**Go version**: 1.26
 
 ## Architecture
 
@@ -65,6 +65,7 @@ go build -o app .
 ## Secrets Management (3-tier)
 
 Priority order for **retrieval**:
+
 1. Environment variables: `APP_<KEY>` (e.g., `APP_API_TOKEN`)
 2. OS keyring (macOS Keychain, Windows Credential Manager, Linux Secret Service)
 3. Config file fallback: `~/.cli-tool-template/secrets.yml` (insecure, with warnings)
@@ -74,6 +75,7 @@ Keyring operations have a 3-second timeout to prevent hanging.
 ## UI Theme (Professional)
 
 **Colors** (ANSI 256, muted):
+
 - Primary: 111 (soft cyan) - titles, active focus
 - Secondary: 250 (light gray) - labels, headers
 - Neutral: 245 (muted gray) - metadata
@@ -83,9 +85,11 @@ Keyring operations have a 3-second timeout to prevent hanging.
 - Highlight: 147 (soft purple) - selection
 
 **Status symbols** (no emojis):
-- Done: `•`  Active: `→`  Running: `◉`  Pending: `○`  Warning: `!`  Error: `✗`
+
+- Done: `•` Active: `→` Running: `◉` Pending: `○` Warning: `!` Error: `✗`
 
 **Rules**:
+
 - No emojis in UI output
 - All styles centralized in `internal/shared/ui/style.go`
 - No inline styling in rendering code
@@ -107,9 +111,9 @@ Keyring operations have a 3-second timeout to prevent hanging.
 ## Key Dependencies
 
 - **github.com/spf13/cobra** - Command framework
-- **github.com/charmbracelet/bubbletea** - TUI framework
-- **github.com/charmbracelet/bubbles** - TUI components
-- **github.com/charmbracelet/huh** - Form components
-- **github.com/charmbracelet/lipgloss** - Styling
+- **charm.land/bubbletea/v2** - TUI framework
+- **charm.land/bubbles/v2** - TUI components
+- **charm.land/huh/v2** - Form components
+- **charm.land/lipgloss/v2** - Styling
 - **github.com/spf13/viper** - Config management
 - **github.com/zalando/go-keyring** - OS keyring access
